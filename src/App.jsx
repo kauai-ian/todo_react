@@ -37,7 +37,7 @@ function Form({ addTodo }) {
 
 Form.propTypes = { addTodo: PropTypes.func.isRequired };
 
-function List({ todoList, toggleCompleted }) {
+function List({ todoList, toggleCompleted, deleteTodo }) {
   return (
     <>
       {!todoList && <div>Loading...</div>}{" "}
@@ -51,11 +51,16 @@ function List({ todoList, toggleCompleted }) {
                   <input
                     type="checkbox"
                     checked={todo.completed}
-                    onChange={(e) => toggleCompleted(todo.id, e.target.checked)}
+                    onChange={(e) => toggleCompleted(todo.id, e.target.checked)} // need to call as a function to run
                   />
                   {todo.title}
                 </label>{" "}
-                <button className="btn btn-del">Remove Item</button>
+                <button
+                  onClick={() => deleteTodo(todo.id)} // need to call as a function  to run
+                  className="btn btn-del"
+                >
+                  Remove Item
+                </button>
               </li>
             );
           })}
@@ -79,30 +84,35 @@ List.propTypes = {
   toggleCompleted: PropTypes.func.isRequired,
 };
 
+
+
+
+
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState([]); //
   const addTodo = (newTodo) => {
     setTodos((prevTodos) => [...prevTodos, newTodo]);
   };
   const toggleCompleted = (id, completed) => {
     setTodos((currentTodos) => {
       return currentTodos.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, completed }; // brand new state object
-        }
-        return todo; // if not matching current id, return todo
+        return todo.id === id ? { ...todo, completed } : todo; // brand new state object or return todo
       });
     });
   };
-
-  console.log(todos); // Q: why is this logging twice? A: It has to mount and update.
+  function deleteTodo(id) {
+    setTodos((currentTodos) => {
+      return currentTodos.filter((todo) => todo.id !== id);
+    });
+  }
+  console.log(todos);
 
   return (
     <div>
       <h1>Todo List in React</h1>
       <Form addTodo={addTodo} setTodos={setTodos} />
       <h2>Todo Items: </h2>
-      <List todoList={todos} toggleCompleted={toggleCompleted} />
+      <List todoList={todos} toggleCompleted={toggleCompleted} deleteTodo={deleteTodo}/>
     </div>
   );
 }
