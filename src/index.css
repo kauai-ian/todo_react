@@ -90,7 +90,7 @@ ul {
   text-decoration: none;
 }
 
-label {
+.todo-container label {
   display: flex;
   gap: 20px;
 }

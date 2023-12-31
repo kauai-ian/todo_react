@@ -16,10 +16,10 @@ export function ListItem({ title, id, deleteList, switchLists }) {
 
   return (
     <li>
-      <label>
-        <input type="text" onClick={() => switchLists(id)} />
+      <p className="list item" type="text" onClick={() => switchLists(id)}>
         {capFrstLtr(title)}
-      </label>{" "}
+      </p>
+
       <button onClick={handleDeleteList} className="btn btn-del">
         Remove
       </button>

@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
 import { TodoForm } from "./NewTodoForm";
-// import { TodoList }
+import { TodoList } from "./TodoList";
 import { List } from "./List";
 import { ListForm } from "./NewListForm";
 
 function App() {
   const listsKey = "lists"; // create a key for local storage key value
-  const [activeListId, setActiveListId] = useState(1);
+  const [activeListId, setActiveListId] = useState("1");
   const [lists, setLists] = useState(() => {
     // tracks the data in a variable, has a function to set the data. use state function to update storage when state changes.
     const storedLists = localStorage.getItem(listsKey); // gets the data
     return storedLists
       ? JSON.parse(storedLists)
-      : [{ id: 1, title: "Inbox", todos: [] }]; // if no stored todos, then empty array
+      : [{ id: "1", title: "Inbox", todos: [] }]; // if no stored todos, then empty array
   });
 
   // side effect to set storage and array to hold todos
   useEffect(() => {
     localStorage.setItem(listsKey, JSON.stringify(lists));
-  }, [lists]);
+    setActiveListId("1");
+  }, [listsKey, lists]);
 
   const addList = (newList) => {
     setLists((prevLists) => [prevLists, newList]);
@@ -81,7 +81,7 @@ function App() {
     setLists((currentLists) => {
       const updatedLists = currentLists.map((list) => {
         if (list.id === activeListId) {
-          const updatedTodos = list.filter((todo) => todo.id !== id);
+          const updatedTodos = list.todos.filter((todo) => todo.id !== id);
           return { ...list, todos: updatedTodos };
         }
         return list;
@@ -99,7 +99,9 @@ function App() {
       );
       setLists((prevLists) => {
         const updatedLists = prevLists.map((list) => {
-          list.id === activeListId ? { ...list, todos: incompleteTodos } : list;
+          if(list.id === activeListId) {
+            return { ...list, todos: incompleteTodos } 
+          } else {return list}
         });
         localStorage.setItem(listsKey, JSON.stringify(updatedLists));
         return updatedLists;
@@ -113,18 +115,21 @@ function App() {
       <h1>Todo List in React</h1>
       <ListForm addList={addList} setLists={setLists} />
       <List
+        lists={lists}
         switchLists={switchLists}
         deleteList={deleteList}
         getActiveList={getActiveList}
       />
 
       <div className="todo-container">
-        <TodoForm addTodo={addTodo} todos={activeList.todos} />
+        <TodoForm addTodo={addTodo} activeList={getActiveList} />
         <h2>Todo Items: </h2>
         <TodoList
-          todoList={activeList.todos}
+          activeList={getActiveList()}
+          todos={getActiveList() ? getActiveList().todos : []}
           toggleCompleted={toggleCompleted}
           deleteTodo={deleteTodo}
+          addTodo={addTodo}
         />
       </div>
       <div className="buttonContainer">
