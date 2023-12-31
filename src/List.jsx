@@ -1,36 +1,36 @@
-import { TodoItem } from "./TodoItem";
+import { ListItem } from "./ListItem";
 import PropTypes from "prop-types";
 
 
-export function List({ todoList, toggleCompleted, deleteTodo }) {
+export function List({ lists, deleteList, switchLists,}) {
     return (
       <>
-        {!todoList && <div>Loading...</div>}{" "}
+        {!lists && <div>Loading...</div>}{" "}
         {/* if the position of the first operand is true then it returns the second operand */}
-        {todoList && todoList.length > 0 && (
+        {lists && lists.length > 0 && (
           <ul>
-            {todoList.map((todo) => {
+            {lists.map((list) => {
               return (
-                <TodoItem {...todo} key={todo.id} toggleCompleted={toggleCompleted} deleteTodo={deleteTodo}/>
+                <ListItem {...list} key={list.id} switchLists={switchLists} deleteList={deleteList}/>
               );
             })}
           </ul>
         )}
-        {todoList && todoList.length === 0 && (
-          <div>There are no todos on the list!</div>
+        {lists && lists.length === 0 && (
+          <div>Make a list first to add a todo!</div>
         )}
       </>
     );
   }
   
   List.propTypes = {
-    todoList: PropTypes.arrayOf(
+    lists: PropTypes.arrayOf(
       PropTypes.shape({
         title: PropTypes.string.isRequired,
         id: PropTypes.string.isRequired,
-        completed: PropTypes.bool.isRequired,
+        todos: PropTypes.array.isRequired,
       })
     ),
-    toggleCompleted: PropTypes.func.isRequired,
-    deleteTodo: PropTypes.func.isRequired,
+    switchLists: PropTypes.func.isRequired,
+    deleteList: PropTypes.func.isRequired,
   };

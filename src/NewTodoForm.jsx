@@ -2,7 +2,7 @@ import { useState } from "react";
 import { v4 as uuid } from "uuid";
 import PropTypes from "prop-types";
 
-export function Form({ addTodo }) {
+export function TodoForm({ addTodo }) {
   const [newItem, setNewItem] = useState(""); // hook that accepts default value of empty string. 2 values. item and function.
   const handleSubmit = (e) => {
     if (newItem === "") return;
@@ -35,4 +35,4 @@ export function Form({ addTodo }) {
   );
 }
 
-Form.propTypes = { addTodo: PropTypes.func.isRequired };
+TodoForm.propTypes = { addTodo: PropTypes.func.isRequired };
