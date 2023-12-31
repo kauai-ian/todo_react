@@ -29,7 +29,7 @@ export function Form({ addTodo }) {
             placeholder="new list item title"
           />
         </div>
-        <button className="btn">Add</button>
+        <button className="btn">Add Item</button>
       </form>
     </section>
   );

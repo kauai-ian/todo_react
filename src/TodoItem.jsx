@@ -6,7 +6,10 @@ export function TodoItem({
   completed,
   toggleCompleted,
   deleteTodo,
-}) {
+}) { 
+  const capFrstLtr = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1)
+  }
   return (
     <li>
       <label>
@@ -15,7 +18,7 @@ export function TodoItem({
           checked={completed}
           onChange={(e) => toggleCompleted(id, e.target.checked)} // need to call as a function to run
         />
-        {title}
+        {capFrstLtr(title)}
       </label>{" "}
       <button
         onClick={() => deleteTodo(id)} // need to call as a function  to run
