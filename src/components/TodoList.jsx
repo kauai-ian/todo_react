@@ -23,7 +23,7 @@ export function TodoList({ activeList, todos, deleteTodo, addTodo, toggleComplet
           })}
         </ul>
       )}
-      {todos && todos.length === 0 && <p>Make a list first to add a todo!</p>}
+      {todos && !todos.length && <p>Make a list first to add a todo!</p>}
         </>
         )}
       </>

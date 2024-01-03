@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 import PropTypes from "prop-types";
 
 export function TodoForm({ addTodo, activeList }) {
-  const activeListData = activeList ? activeList() : null; // get list if its there
+  const activeListData = activeList ? activeList : null; // get list if its there
   const [newItem, setNewItem] = useState(""); // hook that accepts default value of empty string. 2 values. item and function.
   const handleSubmit = (e) => {
     if (newItem === "") return;
@@ -41,5 +41,5 @@ export function TodoForm({ addTodo, activeList }) {
 
 TodoForm.propTypes = {
   addTodo: PropTypes.func.isRequired,
-  activeList: PropTypes.func,
+  activeList: PropTypes.object,
 };

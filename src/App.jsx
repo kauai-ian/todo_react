@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { TodoForm } from "./NewTodoForm";
-import { TodoList } from "./TodoList";
-import { List } from "./List";
-import { ListForm } from "./NewListForm";
+import { useState, useEffect } from "react";
+import { TodoForm } from "./components/NewTodoForm";
+import { TodoList } from "./components/TodoList";
+import { List } from "./components/List";
+import { ListForm } from "./components/NewListForm";
+import { getItemFromLocalStorage } from "./helpers/getItemFromLocalStorage";
+
+// to do
+// logic could be cleaned up
+//lots of re-renders -- need to look at - might have been the extra local storage issue
+// check the get local storage functionality
 
 function App() {
   const listsKey = "lists"; // create a key for local storage key value
   const [activeListId, setActiveListId] = useState("1");
-  const [lists, setLists] = useState(() => {
-    // tracks the data in a variable, has a function to set the data. use state function to update storage when state changes.
-    const storedLists = localStorage.getItem(listsKey); // gets the data
-    return storedLists
-      ? JSON.parse(storedLists)
-      : [{ id: "1", title: "Inbox", todos: [] }]; // if no stored todos, then empty array
-  });
+  const [lists, setLists] = useState(
+    () => getItemFromLocalStorage() // does this work?
+  );
+  console.log(getItemFromLocalStorage())
 
   // side effect to set storage and array to hold todos
   useEffect(() => {
@@ -35,84 +38,66 @@ function App() {
       setActiveListId("1");
     }
   };
-
-  const getActiveList = () => {
-    return lists.find((list) => list.id === activeListId);
-  };
+console.log(lists)
+  const activeList = lists.find((list) => list.id === activeListId); // broken
 
   const switchLists = (id) => {
     setActiveListId(id);
-    
   };
 
   const addTodo = (newTodo) => {
     setLists((prevLists) => {
-      const updatedLists = prevLists.map((list) => {
-        if (list.id === activeListId) {
-          return {
-            ...list,
-            todos: [...list.todos, newTodo], // Add the newTodo to the todos array inside the active list
-          };
-        }
-        return list;
+      prevLists.map((list) => {
+        list.id === activeListId
+          ? {
+              ...list,
+              todos: [...list.todos, newTodo], 
+            }
+          : list;
       });
-      localStorage.setItem(listsKey, JSON.stringify(updatedLists));
-      return updatedLists;
     });
   };
 
   const toggleCompleted = (id, completed) => {
     setLists((currentLists) => {
-      const updatedLists = currentLists.map((list) => {
-        if (list.id === activeListId) {
-          const updatedTodos = list.todos.map((todo) => {
-            if (todo.id === id) {
-              return { ...todo, completed }; // update the completed prop
+      currentLists.map((list) => {
+        list.id === activeListId
+          ? {
+              ...list,
+              todos: list.todos.map((todo) => {
+                todo.id === id
+                  ? { ...todo, completed } // update the completed prop
+                  : todo;
+              }),
             }
-            return todo;
-          });
-          return { ...list, todos: updatedTodos };
-        }
-        return list;
+          : list;
       });
-      localStorage.setItem(listsKey, JSON.stringify(updatedLists));
-      return updatedLists;
     });
   };
 
   const deleteTodo = (id) => {
     setLists((currentLists) => {
-      const updatedLists = currentLists.map((list) => {
-        if (list.id === activeListId) {
-          const updatedTodos = list.todos.filter((todo) => todo.id !== id);
-          return { ...list, todos: updatedTodos };
-        }
-        return list;
+      currentLists.map((list) => {
+        list.id === activeListId
+          ? { ...list, todos: list.todos.filter((todo) => todo.id !== id) }
+          : list;
       });
-      localStorage.setItem(listsKey, JSON.stringify(updatedLists));
-      return updatedLists;
     });
   };
 
   const clearCompletedTodos = () => {
-    const activeList = getActiveList();
     if (activeList) {
       const incompleteTodos = activeList.todos.filter(
         (todo) => !todo.completed
       );
       setLists((prevLists) => {
-        const updatedLists = prevLists.map((list) => {
-          if (list.id === activeListId) {
-            return { ...list, todos: incompleteTodos };
-          } else {
-            return list;
-          }
+        prevLists.map((list) => {
+          list.id === activeListId ? { ...list, todos: incompleteTodos } : list;
         });
-        localStorage.setItem(listsKey, JSON.stringify(updatedLists));
-        return updatedLists;
       });
     }
   };
+
   console.log(lists);
   console.log(activeListId);
 
@@ -121,19 +106,19 @@ function App() {
       <h1>Todo List in React</h1>
       <ListForm addList={addList} setLists={setLists} />
       <List
-        lists={lists.map((list) => ({ ...list, id: String(list.id) }))} // have to make into a string because it was an object.
+        lists={lists} // does this work now?
         switchLists={switchLists}
         deleteList={deleteList}
-        getActiveList={getActiveList}
-        activeListId={activeListId} 
+        activeList={activeList}
+        activeListId={activeListId}
       />
 
       <div className="todo-container">
-        <TodoForm addTodo={addTodo} activeList={getActiveList} />
+        <TodoForm addTodo={addTodo} activeList={activeList} />
         <h2>Todo Items </h2>
         <TodoList
-          activeList={getActiveList()}
-          todos={getActiveList() ? getActiveList().todos : []}
+          activeList={activeList}
+          todos={activeList ? activeList.todos : []}
           toggleCompleted={toggleCompleted}
           deleteTodo={deleteTodo}
           addTodo={addTodo}

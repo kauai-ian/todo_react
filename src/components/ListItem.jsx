@@ -1,5 +1,5 @@
+import trashIcon from "../assets/trash.png";
 import { PropTypes } from "prop-types";
-import trashIcon from './assets/trash.png' 
 
 export function ListItem({ title, id, deleteList, switchLists, activeListId }) {
   const capFrstLtr = (str) => {

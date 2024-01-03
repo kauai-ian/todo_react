@@ -1,4 +1,4 @@
-import trashIcon from './assets/trash.png' 
+import trashIcon from '../assets/trash.png' 
 import PropTypes from "prop-types";
 
 export function TodoItem({
