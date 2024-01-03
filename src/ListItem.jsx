@@ -1,6 +1,7 @@
 import { PropTypes } from "prop-types";
+import trashIcon from './assets/trash.png' 
 
-export function ListItem({ title, id, deleteList, switchLists }) {
+export function ListItem({ title, id, deleteList, switchLists, activeListId }) {
   const capFrstLtr = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
@@ -14,14 +15,18 @@ export function ListItem({ title, id, deleteList, switchLists }) {
     }
   };
 
+  const isActive = activeListId === id
+  console.log('isActive:', isActive);
+console.log('activeListId:', activeListId);
+
   return (
-    <li>
-      <p className="list item" type="text" onClick={() => switchLists(id)}>
+    <li onClick={() => switchLists(id)} className={isActive ? "active" : ''} >
+      <p className="list item" type="text" >
         {capFrstLtr(title)}
       </p>
 
       <button onClick={handleDeleteList} className="btn btn-del">
-        Remove
+      <img src={trashIcon} alt="remove button" className='trash' />
       </button>
     </li>
   );
@@ -32,4 +37,5 @@ ListItem.propTypes = {
   id: PropTypes.string,
   switchLists: PropTypes.func.isRequired,
   deleteList: PropTypes.func.isRequired,
+  activeListId: PropTypes.string,
 };

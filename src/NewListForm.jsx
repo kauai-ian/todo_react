@@ -7,7 +7,7 @@ export function ListForm({ addList }) {
   const handleListSubmit = (e) => {
     if (newList === "") return;
     e.preventDefault();
-    addList({ id: uuid(), title: newList });
+    addList({ id: uuid(), title: newList, todos: [], });
     setNewList("");
   };
 
@@ -25,11 +25,11 @@ export function ListForm({ addList }) {
             className="list"
             id="listItem"
             placeholder="New project list title"
-          />
+          /></div>
           <button className="btn createList" type="submit">
             +
           </button>
-        </div>
+        
       </form>
     </section>
   );

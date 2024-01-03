@@ -18,11 +18,13 @@ function App() {
   // side effect to set storage and array to hold todos
   useEffect(() => {
     localStorage.setItem(listsKey, JSON.stringify(lists));
-    setActiveListId("1");
   }, [listsKey, lists]);
 
   const addList = (newList) => {
-    setLists((prevLists) => [prevLists, newList]);
+    setLists((prevLists) => [...prevLists, newList]); // creates a new array containing prev lists and the new list.
+    if (!activeListId) {
+      setActiveListId(newList.id);
+    }
   };
 
   const deleteList = (id) => {
@@ -30,7 +32,7 @@ function App() {
       return currentLists.filter((list) => list.id !== id);
     });
     if (activeListId === id) {
-      setActiveListId(1);
+      setActiveListId("1");
     }
   };
 
@@ -40,6 +42,7 @@ function App() {
 
   const switchLists = (id) => {
     setActiveListId(id);
+    
   };
 
   const addTodo = (newTodo) => {
@@ -48,7 +51,7 @@ function App() {
         if (list.id === activeListId) {
           return {
             ...list,
-            todos: [...list.todos, newTodo], // Add the newTodo to the todos array
+            todos: [...list.todos, newTodo], // Add the newTodo to the todos array inside the active list
           };
         }
         return list;
@@ -99,9 +102,11 @@ function App() {
       );
       setLists((prevLists) => {
         const updatedLists = prevLists.map((list) => {
-          if(list.id === activeListId) {
-            return { ...list, todos: incompleteTodos } 
-          } else {return list}
+          if (list.id === activeListId) {
+            return { ...list, todos: incompleteTodos };
+          } else {
+            return list;
+          }
         });
         localStorage.setItem(listsKey, JSON.stringify(updatedLists));
         return updatedLists;
@@ -109,21 +114,23 @@ function App() {
     }
   };
   console.log(lists);
+  console.log(activeListId);
 
   return (
     <div>
       <h1>Todo List in React</h1>
       <ListForm addList={addList} setLists={setLists} />
       <List
-        lists={lists}
+        lists={lists.map((list) => ({ ...list, id: String(list.id) }))} // have to make into a string because it was an object.
         switchLists={switchLists}
         deleteList={deleteList}
         getActiveList={getActiveList}
+        activeListId={activeListId} 
       />
 
       <div className="todo-container">
         <TodoForm addTodo={addTodo} activeList={getActiveList} />
-        <h2>Todo Items: </h2>
+        <h2>Todo Items </h2>
         <TodoList
           activeList={getActiveList()}
           todos={getActiveList() ? getActiveList().todos : []}
@@ -134,7 +141,7 @@ function App() {
       </div>
       <div className="buttonContainer">
         <button className="btn clearCompleted" onClick={clearCompletedTodos}>
-          Clear Completed Tasks
+          Clear Completed
         </button>
       </div>
       <footer>

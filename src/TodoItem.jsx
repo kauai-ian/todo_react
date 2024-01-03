@@ -1,3 +1,4 @@
+import trashIcon from './assets/trash.png' 
 import PropTypes from "prop-types";
 
 export function TodoItem({
@@ -11,7 +12,7 @@ export function TodoItem({
     return str.charAt(0).toUpperCase() + str.slice(1)
   }
   return (
-    <li>
+    <li className={` todo-item ${completed ? "checked" : ""}`}>
       <label>
         <input
           type="checkbox"
@@ -24,7 +25,7 @@ export function TodoItem({
         onClick={() => deleteTodo(id)} // need to call as a function  to run
         className="btn btn-del"
       >
-        Remove Item
+        <img src={trashIcon} alt="remove button" className='trash' />
       </button>
     </li>
   );

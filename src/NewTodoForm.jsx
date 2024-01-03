@@ -30,10 +30,10 @@ export function TodoForm({ addTodo, activeList }) {
             onChange={(e) => setNewItem(e.target.value)} // when event object changes, run function
             type="text"
             id="item"
-            placeholder="new list item title"
+            placeholder="New todo item title"
           />
         </div>
-        <button className="btn">Add Item</button>
+        <button className="btn">+</button>
       </form>
     </section>
   );
