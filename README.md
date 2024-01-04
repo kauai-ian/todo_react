@@ -9,4 +9,4 @@ Attempted a simple todo list using React.
 * The default list of Inbox cannot be deleted. All new todos default to inbox unless another list is actively selected. 
 
 ## Desktop view
-<img src="./src/assets/ss_desktop.png" width='600px' height='auto'>
+<img src="./src/assets/ss_desktop.png" width='800px' height='auto'>
