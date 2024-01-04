@@ -15,9 +15,9 @@ export function ListItem({ title, id, deleteList, switchLists, activeListId }) {
     }
   };
 
+
   const isActive = activeListId === id
-  console.log('isActive:', isActive);
-console.log('activeListId:', activeListId);
+
 
   return (
     <li onClick={() => switchLists(id)} className={isActive ? "active" : ''} >

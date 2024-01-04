@@ -13,12 +13,11 @@ import { getItemFromLocalStorage } from "./helpers/getItemFromLocalStorage";
 function App() {
   const listsKey = "lists"; // create a key for local storage key value
   const [activeListId, setActiveListId] = useState("1");
-  const [lists, setLists] = useState(
-    () => getItemFromLocalStorage() // does this work?
-  );
-  console.log(getItemFromLocalStorage())
+  const [lists, setLists] = useState(() => getItemFromLocalStorage());
+  // console.log(getItemFromLocalStorage());
+  console.log(lists);
 
-  // side effect to set storage and array to hold todos
+  // side effect to update list
   useEffect(() => {
     localStorage.setItem(listsKey, JSON.stringify(lists));
   }, [listsKey, lists]);
@@ -38,8 +37,8 @@ function App() {
       setActiveListId("1");
     }
   };
-console.log(lists)
-  const activeList = lists.find((list) => list.id === activeListId); // broken
+
+  const activeList = lists.find((list) => list.id === activeListId);
 
   const switchLists = (id) => {
     setActiveListId(id);
@@ -47,11 +46,11 @@ console.log(lists)
 
   const addTodo = (newTodo) => {
     setLists((prevLists) => {
-      prevLists.map((list) => {
-        list.id === activeListId
+      return prevLists.map((list) => {
+        return list.id === activeListId
           ? {
               ...list,
-              todos: [...list.todos, newTodo], 
+              todos: [...list.todos, newTodo],
             }
           : list;
       });
@@ -60,14 +59,12 @@ console.log(lists)
 
   const toggleCompleted = (id, completed) => {
     setLists((currentLists) => {
-      currentLists.map((list) => {
-        list.id === activeListId
+      return currentLists.map((list) => {
+        return list.id === activeListId
           ? {
               ...list,
               todos: list.todos.map((todo) => {
-                todo.id === id
-                  ? { ...todo, completed } // update the completed prop
-                  : todo;
+                return todo.id === id ? { ...todo, completed } : todo;
               }),
             }
           : list;
@@ -77,8 +74,8 @@ console.log(lists)
 
   const deleteTodo = (id) => {
     setLists((currentLists) => {
-      currentLists.map((list) => {
-        list.id === activeListId
+      return currentLists.map((list) => {
+        return list.id === activeListId
           ? { ...list, todos: list.todos.filter((todo) => todo.id !== id) }
           : list;
       });
@@ -86,49 +83,59 @@ console.log(lists)
   };
 
   const clearCompletedTodos = () => {
-    if (activeList) {
+    if (activeList && activeList.todos) {
       const incompleteTodos = activeList.todos.filter(
         (todo) => !todo.completed
       );
       setLists((prevLists) => {
-        prevLists.map((list) => {
-          list.id === activeListId ? { ...list, todos: incompleteTodos } : list;
+        return prevLists.map((list) => {
+          return list.id === activeListId
+            ? { ...list, todos: incompleteTodos }
+            : list;
         });
       });
     }
   };
 
-  console.log(lists);
-  console.log(activeListId);
+  // console.log(lists);
+  // console.log(activeListId);
 
   return (
     <div>
       <h1>Todo List in React</h1>
-      <ListForm addList={addList} setLists={setLists} />
-      <List
-        lists={lists} // does this work now?
-        switchLists={switchLists}
-        deleteList={deleteList}
-        activeList={activeList}
-        activeListId={activeListId}
-      />
+      <section className="container">
+        <div className="list-container">
+          <ListForm addList={addList} setLists={setLists} />
+          <List
+            lists={lists}
+            switchLists={switchLists}
+            deleteList={deleteList}
+            activeList={activeList}
+            activeListId={activeListId}
+          />
+        </div>
 
-      <div className="todo-container">
-        <TodoForm addTodo={addTodo} activeList={activeList} />
-        <h2>Todo Items </h2>
-        <TodoList
-          activeList={activeList}
-          todos={activeList ? activeList.todos : []}
-          toggleCompleted={toggleCompleted}
-          deleteTodo={deleteTodo}
-          addTodo={addTodo}
-        />
-      </div>
-      <div className="buttonContainer">
-        <button className="btn clearCompleted" onClick={clearCompletedTodos}>
-          Clear Completed
-        </button>
-      </div>
+        <div className="todo-container">
+          <TodoForm addTodo={addTodo} activeList={activeList} />
+          <h2>Todo Items </h2>
+          <TodoList
+            activeList={activeList}
+            todos={activeList ? activeList.todos : []}
+            toggleCompleted={toggleCompleted}
+            deleteTodo={deleteTodo}
+            addTodo={addTodo}
+          />
+
+          <div className="buttonContainer">
+            <button
+              className="btn clearCompleted"
+              onClick={clearCompletedTodos}
+            >
+              Clear Completed
+            </button>
+          </div>
+        </div>
+      </section>
       <footer>
         <div className="footerContainer">
           <a

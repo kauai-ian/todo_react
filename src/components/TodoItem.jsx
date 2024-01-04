@@ -11,6 +11,7 @@ export function TodoItem({
   const capFrstLtr = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1)
   }
+  
   return (
     <li className={` todo-item ${completed ? "checked" : ""}`}>
       <label>

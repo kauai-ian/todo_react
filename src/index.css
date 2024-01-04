@@ -54,9 +54,31 @@ button:focus-visible {
 }
 
 
+.btn-del {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .btn-del:hover {
   border-color: rgb(134, 5, 5);
   color: #ffa564;
+}
+
+.container {
+  display: flex;
+  gap: 5rem;
+  width: 80vw;
+}
+
+.list-container {
+  flex: 1;
+  padding: 20px
+}
+
+.todo-container {
+  flex: 2;
+  padding: 20px;
 }
 
 form {
@@ -65,9 +87,7 @@ form {
   align-items: center;
 }
 
-#listItem {
-  margin-left: 0;
-}
+
 
 form input {
   font-size: 1.2rem;
@@ -81,11 +101,16 @@ li {
   align-items: center;
   background-color: #535bf2;
   padding: 3px;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-.checked {
+li label {
+  font-size: 1.2rem;
+  flex: 1;
+}
+
+.checked  {
 text-decoration: line-through;
 color: rgb(58, 56, 56);
 }
@@ -94,9 +119,7 @@ color: rgb(58, 56, 56);
   background-color: #ffa564;
 }
 
-li label {
-  font-size: 1.2rem;
-}
+
 
 ul {
   text-decoration: none;
@@ -105,12 +128,21 @@ ul {
 
 .todo-container label {
   display: flex;
-  gap: 20px;
+  gap: 1rem;
 }
 
-input {
+.todo-container li {
+  background-color: #488f2c7b;
+}
+
+#listItem,  #item {
   padding: 10px;
   width: 95%;
+  margin-left: 0;
+  background-color: #b0afaf;
+  color:rgb(5, 5, 5);
+  border-radius: 8px;
+  border: none;
 }
 
 .form-row {
@@ -146,7 +178,7 @@ footer {
 .footerContainer a {
   display: flex;
   gap: 30px;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .footerContainer img {

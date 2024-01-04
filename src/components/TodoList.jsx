@@ -2,6 +2,11 @@ import { TodoItem } from "./TodoItem";
 import PropTypes from "prop-types";
 
 export function TodoList({ activeList, todos, deleteTodo, addTodo, toggleCompleted }) {
+  
+  
+  // console.log(activeList)
+  // console.log(todos)
+  
   return (
     <>
     {!activeList && <div>No active list selected</div>}
@@ -11,6 +16,7 @@ export function TodoList({ activeList, todos, deleteTodo, addTodo, toggleComplet
       {todos && todos.length > 0 && (
         <ul>
           {todos.map((todo) => {
+            if (todo && todo.id) {
             return (
               <TodoItem
                 {...todo}
@@ -20,10 +26,13 @@ export function TodoList({ activeList, todos, deleteTodo, addTodo, toggleComplet
                 toggleCompleted={toggleCompleted}
               />
             );
+            } else {
+              console.log("undefined todo");
+            }
           })}
         </ul>
       )}
-      {todos && !todos.length && <p>Make a list first to add a todo!</p>}
+      {todos && !todos.length && <p>No todo items!</p>}
         </>
         )}
       </>
@@ -41,6 +50,5 @@ TodoList.propTypes = {
   addTodo: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
   toggleCompleted: PropTypes.func.isRequired,
-  length: PropTypes.func,
   activeList: PropTypes.object,
 };
